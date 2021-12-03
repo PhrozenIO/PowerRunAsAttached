@@ -66,4 +66,4 @@ At first place, my goal was to create a pure PowerShell version of that script (
 
 The difficulty I faced was caused by my need to read both `Stdout` / `Stderr` in parallel of waiting for user input. Briefly, making the whole thing interactive was a huge pain in pure Powershell.
 
-However, I did manage to get something working, only `Stdout` is captured (not `Stderr`). I created a Gist: TODO if you are interested in this pure PowerShell version and if you have the knowledge to propose a version that captures perfectly both `Stdout` and `Stderr` interactively without blocking the main thread.
+However, I did manage to get something working, only `Stdout` is captured (not `Stderr`). I created a Gist: [HERE](https://gist.github.com/DarkCoderSc/b38645d7c787749d341a99644186ef8f#file-powerpurerunasattached-psm1) if you are interested in this pure PowerShell version and if you have the knowledge to propose a version that captures perfectly both `Stdout` and `Stderr` interactively without blocking the main thread.
