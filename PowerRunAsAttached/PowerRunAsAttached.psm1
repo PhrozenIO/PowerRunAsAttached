@@ -29,28 +29,43 @@ Add-Type -Language CSharp -TypeDefinition @'
 
         private readonly object CriticalSection = new object();
 
-        public void ReadStdThread(StreamReader reader, bool colorRed = false) {
+        public void ReadStdThread(Process proc, bool stdErr = false) 
+        {        
+            StreamReader reader = null;
+            if (stdErr)
+            {
+                reader = proc.StandardError;
+            } 
+            else 
+            {
+                reader = proc.StandardOutput;
+            }
+
             char[] buffer = new char[1024];
 
-            while (true) {
-                int read  = reader.ReadAsync(buffer, 0, buffer.Length).Result;
+            while (!proc.HasExited) 
+            {
+                int read = reader.ReadAsync(buffer, 0, buffer.Length).Result;
 
-                lock (this.CriticalSection) {
-                    if (colorRed) {Console.ForegroundColor = ConsoleColor.Red;}
+                lock (this.CriticalSection) 
+                {
+                    if (stdErr) {Console.ForegroundColor = ConsoleColor.Red;}
                     Console.Write(buffer, 0, read);
-                    if (colorRed) {Console.ResetColor();}
+                    if (stdErr) {Console.ResetColor();}
                 }
             }            
         }
 
-        public RunAsAttached(string username, string password, string domain = "") {
+        public RunAsAttached(string username, string password, string domain = "") 
+        {
 			this.Username = username;            
             this.Domain = domain;
 
             this.SecurePassword = new NetworkCredential("", password).SecurePassword;
 		}
 
-        public void Spawn() {
+        public void Spawn() 
+        {
             ProcessStartInfo processInformation = new ProcessStartInfo();                    
             
             processInformation.FileName = "cmd.exe";
@@ -73,18 +88,15 @@ Add-Type -Language CSharp -TypeDefinition @'
         
             this.Proc.Start();
 
-            Thread stdOutReader = new Thread(() => this.ReadStdThread(this.Proc.StandardOutput));
-            Thread stdErrReader = new Thread(() => this.ReadStdThread(this.Proc.StandardError, true));
-            try {
-                stdOutReader.Start();
-                stdErrReader.Start();
+            Thread stdOutReader = new Thread(() => this.ReadStdThread(this.Proc));
+            Thread stdErrReader = new Thread(() => this.ReadStdThread(this.Proc, true));
+          
+            stdOutReader.Start();
+            stdErrReader.Start();
 
-                while (!this.Proc.HasExited) {
-                    this.Proc.StandardInput.WriteLine(Console.ReadLine());
-                }
-            } finally {
-                stdOutReader.Abort();
-                stdErrReader.Abort();
+            while (!this.Proc.HasExited) 
+            {
+                this.Proc.StandardInput.WriteLine(Console.ReadLine());
             }
 
             Console.WriteLine("...");
