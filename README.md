@@ -56,9 +56,7 @@ https://www.youtube.com/watch?v=n71apwuPZYw
 
 ## CSharp Version: `SharpRunAsAttached`
 
-Since this script relies mostly on CSharp code, It was a piece of cake to create a CSharp version of the project to build a Native Windows Application version as a third alternative. 
-
-You will find this project in another repository HERE.
+You will find a version of this project in pure C# [HERE](https://gist.github.com/DarkCoderSc/60a18484fbda7bbb2a1ec0f2b1d42cb7#file-sharprunasattached-cs)
 
 ## Pure PowerShell Version Notes
 
