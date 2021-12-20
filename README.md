@@ -27,6 +27,7 @@ The module should be imported with available functions:
 You can import this script alternatively by:
 
 * Pasting the whole code to a new PowerShell window
+* `. .\PowerRunAsAttached`
 * Importing a Base64 encoded version of the code through IEX/Invoke-Expression
 * Remote Location through DownloadString(...) then IEX/Invoke-Expression
 * Your imagination
@@ -64,4 +65,8 @@ At first place, my goal was to create a pure PowerShell version of that script (
 
 The difficulty I faced was caused by my need to read both `Stdout` / `Stderr` in parallel of waiting for user input. Briefly, making the whole thing interactive was a huge pain in pure Powershell.
 
-However, I did manage to get something working, only `Stdout` is captured (not `Stderr`). I created a Gist: [HERE](https://gist.github.com/DarkCoderSc/b38645d7c787749d341a99644186ef8f#file-powerpurerunasattached-psm1) if you are interested in this pure PowerShell version and if you have the knowledge to propose a version that captures perfectly both `Stdout` and `Stderr` interactively without blocking the main thread.
+### Update 20 December 2021
+
+I finally managed to do something stable in pure powershell. You will find it in the folder `PowerRunAsAttached` as `PowerRunAsAttached_PSOnly.psm1`
+
+The `Stderr` handling works pretty nicely now but it is not yet perfect.
