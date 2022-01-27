@@ -6,6 +6,8 @@ This script allows to spawn a new interactive console as another user account in
 
 One possible example is that this tool gives you with ease the possibility to do vertical / horizontal privilege escalation through your already established Netcat / WinRM session.
 
+---
+
 ## Usage
 
 You can use this PowerShell Application whether as a PowerShell Script or as a PowerShell Module.
@@ -88,8 +90,6 @@ Spawn a new Windows command-line interpreter (cmd.exe) as another user.
 
 #### Parameters
 
-* `Username` (MANDATORY): A Valid Microsoft Windows User Account
-* `Password` (MANDATORY): Associated account password
 
 | Parameter          | Type             | Default    | Description  |
 |--------------------|------------------|------------|--------------|
@@ -106,9 +106,13 @@ Invoke-RunAsAttached -Username "darkcodersc" -Password "testmepliz"
 
 ![Example](images/example.png)
 
+---
+
 ## Demo Video
 
 https://www.youtube.com/watch?v=n71apwuPZYw
+
+---
 
 ## CSharp Version: `SharpRunAsAttached`
 
