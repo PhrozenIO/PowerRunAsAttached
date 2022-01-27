@@ -96,7 +96,7 @@ Spawn a new Windows command-line interpreter (cmd.exe) as another user.
 | Username (*)       | String           | None       | An existing Microsoft Windows local user account  |
 | Password (*)       | String           | None       | Password of specified user account |
 
-* = Mandatory Options
+`*` = Mandatory Options
 
 ##### Example
 
