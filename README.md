@@ -8,46 +8,101 @@ One possible example is that this tool gives you with ease the possibility to do
 
 ## Usage
 
-You can use this script both as a PowerShell Module or Raw Script (Pasted, from Encoded Base64 String, DownloadString(...) etc...).
+You can use this PowerShell Application whether as a PowerShell Script or as a PowerShell Module.
 
-### As a Module
+### Import a new PowerShell Module (Generic Explanation)
 
-Choose a registered PowerShell Module location (see echo $env:PSModulePath)
+To be available, the module must first be present in a registered module path.
 
-Create a folder called PowerRunAsAttached and place the PowerRunAsAttached.psm1 file inside the new folder.
+You can list module paths with following command:
 
-Open a new PowerShell Window and enter Import-Module PowerRunAsAttached
+```powershell
+Write-Output $env:PSModulePath
+```
 
-The module should be imported with available functions:
+Example Output:
 
-* Invoke-RunAsAttached
+```
+C:\Users\Phrozen\Documents\WindowsPowerShell\Modules;C:\Program Files\WindowsPowerShell\Modules;C:\WINDOWS\system32\WindowsPowerShell\v1.0\Modules
+```
 
-### As a Raw Script
+Copy the module file `<module_name>.psm1` to desired module path.
 
-You can import this script alternatively by:
+You can use bellow command to check if your module was successfully imported:
 
-* Pasting the whole code to a new PowerShell window
-* `. .\PowerRunAsAttached`
-* Importing a Base64 encoded version of the code through IEX/Invoke-Expression
-* Remote Location through DownloadString(...) then IEX/Invoke-Expression
-* Your imagination
+```powershell
+Get-Module -ListAvailable
+```
 
-## Available Commands
+Example Output:
 
-### `Invoke-RunAsAttached`
+```
+PS C:\Users\Phrozen\Desktop> Get-Module -ListAvailable
 
-Run a new `cmd.exe` as another user.
 
-Notice, it starts `cmd.exe` by default, but you can replace it with `powershell.exe` or even add an extra argument to the function to support another shell. You can anyway run `powershell.exe` from `cmd.exe`. What I like to call shell inception is perfectly supported.
+    Directory: C:\Users\Phrozen\Documents\WindowsPowerShell\Modules
+
+
+ModuleType Version    Name                                ExportedCommands
+---------- -------    ----                                ----------------
+Manifest   <version>  <module_name>                       <available_exported_commands>
+
+<..snip..>
+```
+
+If you don't see them, run the following commands and check back.
+
+```powershell
+Import-Module <module_name>
+
+Import-Module <module_name>
+```
+
+### Import a new PowerShell Script (Generic Explanation)
+
+It is not mandatory to install this application as a PowerShell module (Even if file extension is `*.psm1`)
+
+You can also load it as a PowerShell Script. Multiple methods exists including:
+
+Invoking Commands Using:
+
+```powershell
+IEX (Get-Content .\<module_name>.psm1 -Raw)
+```
+
+Loading script from a remote location: 
+
+```powershell
+IEX (New-Object Net.WebClient).DownloadString('http://127.0.0.1/<module_name>.psm1')
+```
+
+## Available Functions
+
+```powershell
+Invoke-RunAsAttached
+```
+
+### Invoke-RunAsAttached
+
+Spawn a new Windows command-line interpreter (cmd.exe) as another user.
 
 #### Parameters
 
 * `Username` (MANDATORY): A Valid Microsoft Windows User Account
 * `Password` (MANDATORY): Associated account password
 
+| Parameter          | Type             | Default    | Description  |
+|--------------------|------------------|------------|--------------|
+| Username (*)       | String           | None       | An existing Microsoft Windows local user account  |
+| Password (*)       | String           | None       | Password of specified user account |
+
+* = Mandatory Options
+
 ##### Example
 
-`Invoke-RunAsAttached -Username "darkcodersc" -Password "testmepliz"`
+```powershell
+Invoke-RunAsAttached -Username "darkcodersc" -Password "testmepliz"
+```
 
 ![Example](images/example.png)
 
@@ -57,16 +112,4 @@ https://www.youtube.com/watch?v=n71apwuPZYw
 
 ## CSharp Version: `SharpRunAsAttached`
 
-You will find a version of this project in pure C# [HERE](https://gist.github.com/DarkCoderSc/60a18484fbda7bbb2a1ec0f2b1d42cb7#file-sharprunasattached-cs)
-
-## Pure PowerShell Version Notes
-
-At first place, my goal was to create a pure PowerShell version of that script (without inline CSharp) but I faced multiple difficulties mostely because of Asynchronous Reading Operation issues and lack of threading functionalities that would fit my needs.
-
-The difficulty I faced was caused by my need to read both `Stdout` / `Stderr` in parallel of waiting for user input. Briefly, making the whole thing interactive was a huge pain in pure Powershell.
-
-### Update 20 December 2021
-
-I finally managed to do something stable in pure powershell. You will find it in the folder `PowerRunAsAttached` as `PowerRunAsAttached_PSOnly.psm1`
-
-The `Stderr` handling works pretty nicely now but it is not yet perfect.
+You will find an alternative version of this project in pure C# [HERE](https://gist.github.com/DarkCoderSc/60a18484fbda7bbb2a1ec0f2b1d42cb7#file-sharprunasattached-cs)
